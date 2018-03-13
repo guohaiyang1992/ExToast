@@ -1,11 +1,12 @@
 package com.simon.toastdemo;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
 import com.simon.toastlib.core.ExToast;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,7 +17,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.normal_toast_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "noraml", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "noraml", android.widget.Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -30,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.unnormal2_toast_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ExToast.makeText(, "unnormal2", Toast.LENGTH_SHORT).show();
-                ExToast.makeText(MainActivity.this, "unnormal2", Toast.LENGTH_SHORT).show();
+                ExToast.makeText(getApplicationContext(), "unnormal2", Toast.LENGTH_SHORT).show();
+
             }
         });
 

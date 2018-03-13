@@ -6,12 +6,16 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.simon.toastlib.BuildConfig;
+import com.simon.toastlib.utils.RomUtils;
 
 /**
  * 拓展版的Toast
@@ -71,7 +75,7 @@ public class ExToast {
      *
      * @param context
      */
-    public ExToast(Activity context) {
+    public ExToast(Context context) {
         mContext = context;
         mTN = new AgentOperation();
         //默认距离底部64dp
@@ -218,7 +222,7 @@ public class ExToast {
     /**
      * 创建一个Toast
      */
-    public static ExToast makeText(Activity context, CharSequence text, int duration) {
+    public static ExToast makeText(Context context, CharSequence text, int duration) {
         ExToast result = new ExToast(context);
 
         View view = Toast.makeText(context, text, Toast.LENGTH_SHORT).getView();
@@ -261,13 +265,13 @@ public class ExToast {
     /**
      * 创建一个Toast
      */
-    public static ExToast makeText(Activity context, int resId, int duration)
+    public static ExToast makeText(Context context, int resId, int duration)
             throws Resources.NotFoundException {
         return makeText(context, context.getResources().getText(resId), duration);
     }
 
     /**
-     * 更新Toast 文字，在此之前确保Toast 使用{@link #makeText(Activity, int, int)} 或者{@link #makeText(Activity, CharSequence, int)}
+     * 更新Toast 文字，在此之前确保Toast 使用{@link #makeText(Context, int, int)} 或者{@link #makeText(Context, CharSequence, int)}
      * 创建成功过
      *
      * @param resId 文字资源id
@@ -277,7 +281,7 @@ public class ExToast {
     }
 
     /**
-     * 更新Toast 文字，在此之前确保Toast 使用{@link #makeText(Activity, int, int)} 或者{@link #makeText(Activity, CharSequence, int)}
+     * 更新Toast 文字，在此之前确保Toast 使用{@link #makeText(Context, int, int)} 或者{@link #makeText(Context, CharSequence, int)}
      * 创建成功过
      *
      * @param s 文字内容
@@ -350,6 +354,27 @@ public class ExToast {
             params.flags = WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+            //config window type
+            configWindowType(params);
+
+        }
+
+        private void configWindowType(WindowManager.LayoutParams params) {
+            if (params == null) {
+                return;
+            }
+            //fix flyme os
+            if (RomUtils.isFlyme()) {
+                params.type = WindowManager.LayoutParams.FIRST_SYSTEM_WINDOW + 37;
+                return;
+            }
+            //fix if sdk>=7.1.1
+            if (Build.VERSION.SDK_INT >= 25) {
+                params.type = WindowManager.LayoutParams.TYPE_PHONE;
+            } else {
+                params.type = WindowManager.LayoutParams.TYPE_TOAST;
+            }
+
         }
 
         /**
